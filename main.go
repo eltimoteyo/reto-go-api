@@ -4,9 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
-	"time"
 
 	//"path"
 
@@ -51,16 +49,16 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", indexRoute)
 	r.HandleFunc("/calcular", calcular)
+	http.Handle("/", r)
+	// srv := &http.Server{
+	// 	Handler: r,
+	// 	Addr:    "https://reto-go-api.herokuapp.com",
+	// 	// Good practice: enforce timeouts for servers you create!
+	// 	WriteTimeout: 15 * time.Second,
+	// 	ReadTimeout:  15 * time.Second,
+	// }
 
-	srv := &http.Server{
-		Handler: r,
-		Addr:    "https://reto-go-api.herokuapp.com",
-		// Good practice: enforce timeouts for servers you create!
-		WriteTimeout: 15 * time.Second,
-		ReadTimeout:  15 * time.Second,
-	}
-
-	log.Fatal(srv.ListenAndServe())
+	// log.Fatal(srv.ListenAndServe())
 	// fmt.Println("Go program")
 
 	// server := echo.New()
