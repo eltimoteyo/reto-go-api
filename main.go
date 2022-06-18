@@ -4,12 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
+	"os"
 
 	//"path"
 
+	"github.com/gorilla/context"
 	"github.com/gorilla/mux"
+	"gopkg.in/paytm/grace.v1"
 	//"github.com/labstack/echo/v4"
 )
 
@@ -41,14 +43,24 @@ func calcular(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	router := mux.NewRouter()
+	//router := mux.NewRouter()
 
-	router.HandleFunc("/", indexRoute)
-	router.HandleFunc("/calcular", calcular).Methods("POST")
-	log.Fatal(http.ListenAndServe(":80", router))
+	// router.HandleFunc("/", indexRoute)
+	// router.HandleFunc("/calcular", calcular).Methods("POST")
+	// log.Fatal(http.ListenAndServe(":80", router))
 
 	// log.Fatal(srv.ListenAndServe())
 	// fmt.Println("Go program")
+	muxRouter := mux.NewRouter()
+	muxRouter.HandleFunc("/", indexRoute)
+	muxRouter.HandleFunc("/calcular", calcular).Methods("POST")
+	http.Handle("/", muxRouter)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "9000" // Default port if not specified
+	}
+	grace.Serve(":"+port, context.ClearHandler(http.DefaultServeMux))
 
 	// server := echo.New()
 	// server.GET(path.Join("/"), indexRoute)
