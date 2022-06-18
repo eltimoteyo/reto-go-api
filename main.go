@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 
 	//"path"
@@ -40,23 +41,11 @@ func calcular(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	// router := mux.NewRouter().StrictSlash(true)
+	router := mux.NewRouter()
 
-	// router.HandleFunc("/", indexRoute)
-	// router.HandleFunc("/calcular", createTask).Methods("POST")
-	// log.Fatal(http.ListenAndServe(":3000", router))
-
-	r := mux.NewRouter()
-	r.HandleFunc("/", indexRoute)
-	r.HandleFunc("/calcular", calcular)
-	http.Handle("/", r)
-	// srv := &http.Server{
-	// 	Handler: r,
-	// 	Addr:    "https://reto-go-api.herokuapp.com",
-	// 	// Good practice: enforce timeouts for servers you create!
-	// 	WriteTimeout: 15 * time.Second,
-	// 	ReadTimeout:  15 * time.Second,
-	// }
+	router.HandleFunc("/", indexRoute)
+	router.HandleFunc("/calcular", calcular).Methods("POST")
+	log.Fatal(http.ListenAndServe(":80", router))
 
 	// log.Fatal(srv.ListenAndServe())
 	// fmt.Println("Go program")
